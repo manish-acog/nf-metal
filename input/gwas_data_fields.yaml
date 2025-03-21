@@ -1,0 +1,23 @@
+
+# Assumptions about the input GWAS files:
+# 1. All files will have the same column names
+# 2. Beta or/and odds ratio and std error will be available
+# 3. Harmonised data
+
+INPUT_FILES:
+  - 'GCST90026417.tsv'
+  - 'GCST006801.tsv'
+
+VARIANT_ID: "variant_id"
+OTHER_ALLELE: "other_allele"
+EFFECT_ALLELE: "effect_allele"
+BETA: "beta"
+ODDS_RATIO: null
+PVALUE: "p_value"
+STDERR: "standard_error"
+EFFECT_ALLELE_FREQ: "effect_allele_frequency"
+
+# Name of output meta-analysis file
+META_OUTPUT_FILE: "meta-analysis.tsv"
+
+
