@@ -21,7 +21,7 @@ workflow {
     metal_results_ch = RUN_METAL(metal_script_ch, params.output_dir)
 
     // Step 4: Clean the METAL results
-    results_cleanup_ch = RESULTS_CLEANUP(metal_results_ch, params.config_file, params.output_dir)
+    // results_cleanup_ch = RESULTS_CLEANUP(metal_results_ch, params.config_file, params.output_dir)
 }
 
 
@@ -37,7 +37,7 @@ process DATA_PREP {
 
     script:
         """
-        "$baseDir/scripts/data_prep.py" --input_path $input_dir --config_file $config_file --output_path $output_dir
+        "$PWD/scripts/data_prep.py" --input_path $input_dir --config_file $config_file --output_path $output_dir        
         """
 }
 
@@ -53,7 +53,7 @@ process CREATE_METAL_SCRIPT {
 
     script:
         """
-        "$baseDir/scripts/create_metal_script.py" --config_file $config_file --output_path $output_dir --qc_files ${qc_files.collect { it.getName() }.join(' ')}
+        "$PWD/scripts/create_metal_script.py" --config_file $config_file --output_path $output_dir --qc_files ${qc_files.collect { it.getName() }.join(' ')}
         """
 }
 
@@ -87,6 +87,6 @@ process RESULTS_CLEANUP {
 
     script:
     """
-    "$baseDir/scripts/metal_results_cleanup.py" --metal_results $metal_file --config_file $config_file --output_path $output_dir
+    "$PWD/scripts/metal_results_cleanup.py" --metal_results $metal_file --config_file $config_file --output_path $output_dir
     """
 }
