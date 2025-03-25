@@ -12,10 +12,10 @@ log.info """
 
 workflow {
     // Step 1: Run data preparation and capture its output
-    data_output_ch = DATA_PREP(params.input_dir, params.config_file, params.output_dir, params.scripts_dir)
+    data_output_ch = DATA_PREP(params.input_dir, params.config_file, params.output_dir)
 
     // Step 2: Create METAL script, waits for DATA_PREP to complete
-    metal_script_ch = CREATE_METAL_SCRIPT(params.config_file, params.output_dir, data_output_ch, params.scripts_dir)
+    metal_script_ch = CREATE_METAL_SCRIPT(params.config_file, params.output_dir, data_output_ch)
 
     // Step 3: Run METAL for GWAS meta-analysis
     metal_results_ch = RUN_METAL(metal_script_ch, params.output_dir)
@@ -31,14 +31,13 @@ process DATA_PREP {
         path input_dir
         path config_file
         path output_dir
-        path scripts_dir
 
     output:
         path "${output_dir}/qc_*.tsv"
 
     script:
         """
-        "$scripts_dir/data_prep.py" --input_path $input_dir --config_file $config_file --output_path $output_dir        
+        /workspace/scripts/data_prep.py --input_path $input_dir --config_file $config_file --output_path $output_dir        
         """
 }
 
@@ -48,14 +47,13 @@ process CREATE_METAL_SCRIPT {
         path config_file
         path output_dir
         path qc_files
-        path scripts_dir
 
     output:
         path "${output_dir}/metal_script.txt"
 
     script:
         """
-        "$scripts_dir/create_metal_script.py" --config_file $config_file --output_path $output_dir --qc_files ${qc_files.collect { it.getName() }.join(' ')}
+        /workspace/scripts/create_metal_script.py --config_file $config_file --output_path $output_dir --qc_files ${qc_files.collect { it.getName() }.join(' ')}
         """
 }
 
@@ -89,6 +87,6 @@ process RESULTS_CLEANUP {
 
     script:
     """
-    "$PWD/scripts/metal_results_cleanup.py" --metal_results $metal_file --config_file $config_file --output_path $output_dir
+    /workspace/scripts/metal_results_cleanup.py --metal_results $metal_file --config_file $config_file --output_path $output_dir
     """
 }
