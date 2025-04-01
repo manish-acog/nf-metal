@@ -18,7 +18,7 @@ workflow {
     metal_script_ch = CREATE_METAL_SCRIPT(params.config_file, params.output_dir, data_output_ch)
 
     // Step 3: Run METAL for GWAS meta-analysis
-    metal_results_ch = RUN_METAL(metal_script_ch, params.output_dir)
+    // metal_results_ch = RUN_METAL(metal_script_ch, params.output_dir)
 
     // Step 4: Clean the METAL results
     // results_cleanup_ch = RESULTS_CLEANUP(metal_results_ch, params.config_file, params.output_dir)
